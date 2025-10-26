@@ -269,3 +269,9 @@
 .animate-marquee-right:hover {
   animation-play-state: paused;
 }
+
+/* GSAP Headline Animation Styles */
+.char {
+  display: inline-block;
+  will-change: transform, opacity;
+}

@@ -19,6 +19,8 @@ import {
   Phone,
   MapPin
 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
 
 // Testimonial data
 const testimonials = [
@@ -67,6 +69,64 @@ const features = [
     description: "Bank-level security with SOC 2 compliance and advanced data protection measures."
   }
 ];
+
+// Animated Headline Component
+function AnimatedHeadline() {
+  const headlineRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!headlineRef.current) return;
+
+    const chars = headlineRef.current.querySelectorAll('.char');
+    
+    // Set initial state - start from bottom
+    gsap.set(chars, { y: 100, opacity: 0 });
+
+    // Animate characters with stagger - move up to position
+    gsap.to(chars, {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: "back.out(1.7)",
+      stagger: 0.05,
+      delay: 0.5
+    });
+  }, []);
+
+  const headline = "Automate your workflow. Become AI Ready";
+  const words = headline.split(' ');
+
+  return (
+    <div ref={headlineRef}>
+      <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8">
+        {words.map((word, wordIndex) => (
+          <div key={wordIndex} className="inline-block overflow-hidden">
+            {word.split('').map((char, charIndex) => (
+              <span
+                key={charIndex}
+                className="char inline-block"
+                style={{ 
+                  transform: 'translateY(100px)',
+                  opacity: 0
+                }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
+            {wordIndex < words.length - 1 && (
+              <span className="char inline-block" style={{ 
+                transform: 'translateY(100px)',
+                opacity: 0
+              }}>
+                {'\u00A0'}
+              </span>
+            )}
+          </div>
+        ))}
+      </h1>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
@@ -121,11 +181,7 @@ export default function Home() {
 
         <div className="relative z-10 container mx-auto px-4 pb-20">
           <div className="max-w-4xl">
-            <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8">
-              Automate your workflow.
-              <br />
-              <span className="text-primary">Become AI Ready</span>
-            </h1>
+            <AnimatedHeadline />
             <div className="flex items-center space-x-4">
               <Button size="lg" className="text-lg px-8 py-6">
                 Try it out
